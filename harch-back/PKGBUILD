@@ -1,0 +1,9 @@
+pkgname=harch-back
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="A backup and restore script for pacman package cache"
+arch=('any')
+depends=('tar' 'pv')
+package() {
+    install -Dm755 "$srcdir/harch-back.sh" "$pkgdir/usr/bin/harch-back"
+}
