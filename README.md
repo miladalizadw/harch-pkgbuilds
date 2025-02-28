@@ -1,1 +1,1 @@
-*** harch linux pkgbuild's open source
+# harch linux pkgbuild's open source
