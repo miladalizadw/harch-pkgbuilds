@@ -1,0 +1,27 @@
+# Maintainer: Your Name <your.email@example.com>
+pkgname=harch-fake-apt
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="you can use apt command for work with pacman package manager(it's just a command translator)"
+arch=('any')
+license=('custom')
+#depends=('telegram-desktop')
+#makedepends=('some-build-dependency') # Add actual build dependencies here
+#source=("<your_source_url_or_path>")
+#sha256sums=('SKIP') # Replace with actual checksum if necessary
+conflicts=('apt')
+package() {
+    cd "$srcdir"
+    
+    # Install files to the filesystem
+    install -dm755 "$pkgdir/usr/bin/"
+
+    cp  apt "$pkgdir/usr/bin/"
+    chmod +x "$pkgdir/usr/bin/apt"
+
+}
+
+# Optional: Custom license file
+package_license() {
+    install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

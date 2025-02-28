@@ -1,0 +1,117 @@
+#!/bin/bash
+
+print_help() {
+    echo "This is just an APT package manager emulator released by the Harch Linux provider!"
+    echo "Do not try to add Debian-based repositories to the list of repositories because it will damage the system!"
+    echo "Also, don't try to install packages in Deb format because it won't work, but you can install Pacman packages in ZST format instead."
+    echo ""
+    echo "Usage: hg [command] [options]"
+    echo ""
+    echo "Most used commands:"
+    echo "  list [package_name]    - List packages based on package names"
+    echo "  search package_name    - Search in package descriptions"
+    echo "  show package_name      - Show package details"
+    echo "  install package1 [package2 ...] - Install packages"
+    echo "  reinstall package_name - Reinstall packages"
+    echo "  remove package1 [package2 ...] - Remove packages"
+    echo "  autoremove             - Automatically remove all unused packages"
+    echo "  update                 - Update list of available packages"
+    echo "  upgrade                - Upgrade the system by installing/upgrading packages"
+    echo "  full-upgrade           - Upgrade the system by removing/installing/upgrading packages"
+    echo "  edit-sources           - Edit the source information file"
+    echo "  satisfy dependency     - Satisfy dependency strings"
+    echo "  help                   - Display this help message"
+}
+
+case "$1" in
+    list)
+        if [ -n "$2" ]; then
+            pacman -Q | grep "$2"
+        else
+            pacman -Q
+        fi
+        ;;
+    search)
+        if [ -n "$2" ]; then
+            pacman -Ss "$2"
+        else
+            echo "No package specified for search"
+        fi
+        ;;
+    show)
+        if [ -n "$2" ]; then
+            pacman -Qi "$2"
+        else
+            echo "No package specified for details"
+        fi
+        ;;
+    install)
+        shift
+        if [ $# -eq 0 ]; then
+            echo "No packages specified for installation"
+            exit 1
+        fi
+        for pkg in "$@"; do
+            filename=$(basename "$pkg")
+            if [[ "$filename" == *".zst" ]]; then
+                sudo pacman -U "$pkg"
+            elif [[ "$filename" == *".deb" ]]; then
+                pkgname=$(echo "$filename" | sed -e 's/_[^_]*\.deb$//' -e 's/-[[:digit:]]\+.*$//')
+                if pacman -Si "$pkgname" &> /dev/null; then
+                    echo -e " \e[31m Package $filename cannot be installed: DEB packages are not supported on this distribution. \e[0m"
+                    echo -e " \e[32m But we are trying to install $pkgname package from Harch Linux repository... \e[0m "
+                    sudo pacman -S "$pkgname"
+                else
+                    echo -e " \e[31m Package $filename cannot be installed: DEB packages are not supported on this distribution."
+                    echo -e "We tried to install the $pkgname package from the Harch Linux repositories, but this package is not available in our repositories! \e[0m"
+                fi
+            else
+                sudo pacman -S "$pkg"
+            fi
+        done
+        ;;
+    reinstall)
+        if [ -n "$2" ]; then
+            sudo pacman -S --needed --noconfirm "$2"
+        else
+            echo "No package specified for reinstallation"
+        fi
+        ;;
+    remove)
+        shift
+        if [ $# -eq 0 ]; then
+            echo "No packages specified for removal"
+            exit 1
+        fi
+        sudo pacman -R "$@"
+        ;;
+    autoremove)
+        sudo pacman -Rns $(pacman -Qdtq)
+        ;;
+    update)
+        sudo pacman -Sy
+        ;;
+    upgrade)
+        sudo pacman -Syu
+        ;;
+    full-upgrade)
+        sudo pacman -Syu --needed
+        ;;
+    edit-sources)
+        sudo nano /etc/pacman.conf
+        ;;
+    satisfy)
+        if [ -n "$2" ]; then
+            sudo pacman -S --asdeps "$2"
+        else
+            echo "No dependency specified for satisfaction"
+        fi
+        ;;
+    help|--help|-h)
+        print_help
+        ;;
+    *)
+        echo "Unknown command"
+        print_help
+        ;;
+esac
