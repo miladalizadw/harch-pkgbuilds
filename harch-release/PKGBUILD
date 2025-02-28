@@ -1,0 +1,24 @@
+# Maintainer: Your Name <your.email@example.com>
+pkgname=harch-release
+pkgver=1.0
+pkgrel=2
+pkgdesc="harch os release package"
+arch=('any')
+license=('GPL')
+install=harch.install
+package() {
+    # Install cursor theme
+    install -dm755 "$pkgdir/usr/release-files"
+    cp "harchlinux-logo.png"            "$pkgdir/usr/release-files"
+    cp "harchlinux-logo.svg"            "$pkgdir/usr/release-files"
+    cp "harchlinux-logo-text.svg"       "$pkgdir/usr/release-files"
+    cp "harchlinux-logo-text-dark.svg"  "$pkgdir/usr/release-files"
+    cp "harchlinux-logo-text-dark.svg"  "$pkgdir/usr/release-files"
+    cp "lsb-release"                    "$pkgdir/usr/release-files"
+    cp "os-release"                     "$pkgdir/usr/release-files"
+
+
+}
+
+
+# vim:set ts=2 sw=2 et:
