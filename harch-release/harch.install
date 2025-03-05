@@ -2,12 +2,6 @@
 post_install() {
 cd /usr/release-files
 mv /etc/arch-release                 /etc/harch-release
-
-cp "harchlinux-logo.png"            "/usr/share/pixmaps"
-cp "harchlinux-logo.svg"            "/usr/share/pixmaps"
-cp "harchlinux-logo-text.svg"       "/usr/share/pixmaps"
-cp "harchlinux-logo-text-dark.svg"  "/usr/share/pixmaps"
-cp "harchlinux-logo-text-dark.svg"  "/usr/share/pixmaps"
 cp "lsb-release"                    "/etc"
 cp "os-release"                     "/etc"
 rm -fr /usr/release-files

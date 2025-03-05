@@ -9,11 +9,13 @@ install=harch.install
 package() {
     # Install cursor theme
     install -dm755 "$pkgdir/usr/release-files"
-    cp "harchlinux-logo.png"            "$pkgdir/usr/release-files"
-    cp "harchlinux-logo.svg"            "$pkgdir/usr/release-files"
-    cp "harchlinux-logo-text.svg"       "$pkgdir/usr/release-files"
-    cp "harchlinux-logo-text-dark.svg"  "$pkgdir/usr/release-files"
-    cp "harchlinux-logo-text-dark.svg"  "$pkgdir/usr/release-files"
+    install -dm755 "$pkgdir/usr/share/pixmaps"
+
+    cp "harchlinux-logo.png"            "$pkgdir/usr/share/pixmaps"
+    cp "harchlinux-logo.svg"            "$pkgdir/usr/share/pixmaps"
+    cp "harchlinux-logo-text.svg"       "$pkgdir/usr/share/pixmaps"
+    cp "harchlinux-logo-text-dark.svg"  "$pkgdir/usr/share/pixmaps"
+    cp "harchlinux-logo-text-dark.svg"  "$pkgdir/usr/share/pixmaps"
     cp "lsb-release"                    "$pkgdir/usr/release-files"
     cp "os-release"                     "$pkgdir/usr/release-files"
 
